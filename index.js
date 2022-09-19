@@ -121,6 +121,8 @@ async function run() {
 
     const clusterName = cluster ? cluster : 'default';
 
+    const clusterDescription = await ecs.describeClusters({ clusters: [clusterName] });
+
     core.debug(`Running task with ${JSON.stringify({
       cluster: clusterName,
       taskDefinition: taskDefArn,
@@ -131,6 +133,12 @@ async function run() {
     const runTaskResponse = await ecs.runTask({
       cluster: clusterName,
       taskDefinition: taskDefArn,
+      networkConfiguration: {
+        awsvpcConfiguration: {
+          subnets: clusterDescription.subnets,
+          assignPublicIp: 'DISABLED'
+        }
+      },
       count: count,
       startedBy: startedBy
     }).promise();

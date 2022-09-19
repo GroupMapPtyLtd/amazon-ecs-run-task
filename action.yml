@@ -10,6 +10,9 @@ inputs:
   cluster:
     description: "The name of the ECS cluster. Will default to the 'default' cluster"
     required: true
+  subnets:
+    description: 'List of subnets to use for the task'
+    required: false
   count:
     description: "The count of tasks to run. Will default to the 1"
     required: true
