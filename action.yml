@@ -12,7 +12,10 @@ inputs:
     required: true
   subnets:
     description: 'List of subnets to use for the task'
-    required: false
+    required: true
+  container-security-group:
+    description: "The security group of the container"
+    required: true
   count:
     description: "The count of tasks to run. Will default to the 1"
     required: true

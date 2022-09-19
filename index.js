@@ -92,6 +92,8 @@ async function run() {
     const taskDefinitionFile = core.getInput('task-definition', { required: true });
     const cluster = core.getInput('cluster', { required: false });
     const count = core.getInput('count', { required: true });
+    const subnets = core.getInput('subnets', { required: true });
+    const containerSecurityGroup = core.getInput('container-security-group', { required: true });
     const startedBy = core.getInput('started-by', { required: false }) || agent;
     const waitForFinish = core.getInput('wait-for-finish', { required: false }) || false;
     let waitForMinutes = parseInt(core.getInput('wait-for-minutes', { required: false })) || 30;
@@ -121,8 +123,6 @@ async function run() {
 
     const clusterName = cluster ? cluster : 'default';
 
-    const clusterDescription = await ecs.describeClusters({ clusters: [clusterName] });
-
     core.debug(`Running task with ${JSON.stringify({
       cluster: clusterName,
       taskDefinition: taskDefArn,
@@ -135,8 +135,9 @@ async function run() {
       taskDefinition: taskDefArn,
       networkConfiguration: {
         awsvpcConfiguration: {
-          subnets: clusterDescription.subnets,
-          assignPublicIp: 'DISABLED'
+          subnets: subnets,
+          assignPublicIp: 'DISABLED',
+          securityGroups: [containerSecurityGroup]
         }
       },
       count: count,
