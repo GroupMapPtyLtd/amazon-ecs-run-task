@@ -140,6 +140,7 @@ async function run() {
           securityGroups: [containerSecurityGroup]
         }
       },
+      launchType: "FARGATE",
       count: count,
       startedBy: startedBy
     }).promise();
