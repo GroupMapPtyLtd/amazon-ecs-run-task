@@ -108,7 +108,7 @@ async function run() {
 
     if (entryPoint) {
       // use a new family name for this task definition so we don't overwrite the original task definition
-      taskDefContents.family = taskDefContents.family + "-" + entryPoint.join("-").replace(/[\s:-]/g, "-");
+      taskDefContents.family = taskDefContents.family + "-" + entryPoint.replace(/[\s:-]/g, "-");
       taskDefContents.containerDefinitions[0].entryPoint = entryPoint.split(" ");
     }
 
