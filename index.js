@@ -94,6 +94,7 @@ async function run() {
     const count = core.getInput('count', { required: true });
     const subnets = (core.getInput('subnets', { required: true }) || "").split(",");
     const containerSecurityGroup = core.getInput('container-security-group', { required: true });
+    const entryPoint = core.getInput('entry-point', { required: false });
     const startedBy = core.getInput('started-by', { required: false }) || agent;
     const waitForFinish = core.getInput('wait-for-finish', { required: false }) || false;
     let waitForMinutes = parseInt(core.getInput('wait-for-minutes', { required: false })) || 30;
@@ -108,6 +109,10 @@ async function run() {
       path.join(process.env.GITHUB_WORKSPACE, taskDefinitionFile);
     const fileContents = fs.readFileSync(taskDefPath, 'utf8');
     const taskDefContents = removeIgnoredAttributes(cleanNullKeys(yaml.parse(fileContents)));
+
+    if (entryPoint) {
+      taskDefContents.containerDefinitions[0].entryPoint = entryPoint.split(" ");
+    }
 
     let registerResponse;
     try {
