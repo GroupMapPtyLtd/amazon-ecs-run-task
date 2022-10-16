@@ -108,7 +108,10 @@ async function run() {
 
     if (entryPoint) {
       // use a new family name for this task definition so we don't overwrite the original task definition
-      taskDefContents.family = taskDefContents.family + "-" + entryPoint.replace(/[\s:-]/g, "-");
+      const entryPointSlug = entryPoint.replace(/[^a-zA-Z0-9-]/g, "-").replace(/[-]+/g, "-");
+      // a simple 8 digit hex hash - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+      const entryPointCode = entryPoint.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0).toString(16);
+      taskDefContents.family = taskDefContents.family + "--" + entryPointCode + "-" + entryPointSlug;
       taskDefContents.containerDefinitions[0].entryPoint = entryPoint.split(" ");
     }
 
