@@ -113,9 +113,13 @@ async function run() {
       // a simple 8 digit hex hash - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
       const entryPointCode = entryPoint.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0).toString(16);
       taskDefContents.family = taskDefContents.family + "--" + entryPointCode + "-" + entryPointSlug;
-      // find the container defintion that ISN'T the logging container
-      const containerDefinition = taskDefContents.containerDefinitions.find((cd) => !cd.firelensConfiguration);
-      containerDefinition.entryPoint = entryPoint.split(" ");
+      const containerDefinition = taskDefContents.containerDefinitions.find(function(element) {
+        return element.name == containerName;
+      });
+      if (!containerDefinition) {
+        throw new Error('Invalid task definition: Could not find container definition with matching name');
+      }
+        containerDefinition.entryPoint = entryPoint.split(" ");
     }
 
     let registerResponse;
