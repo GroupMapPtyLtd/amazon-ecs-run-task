@@ -86,6 +86,7 @@ async function run() {
 
     // Get inputs
     const taskDefinitionFile = core.getInput('task-definition', { required: true });
+    const containerName = core.getInput('container-name', { required: true });
     const cluster = core.getInput('cluster', { required: false });
     const count = core.getInput('count', { required: true });
     const subnets = (core.getInput('subnets', { required: true }) || "").split(",");
