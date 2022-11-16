@@ -113,7 +113,7 @@ async function run() {
       const entryPointCode = entryPoint.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0).toString(16);
       taskDefContents.family = taskDefContents.family + "--" + entryPointCode + "-" + entryPointSlug;
       // find the container defintion that ISN'T the logging container
-      const containerDefinition = taskDefContents.containerDefinitions.find((cd) => !cd.FirelensConfiguration);
+      const containerDefinition = taskDefContents.containerDefinitions.find((cd) => !cd.firelensConfiguration);
       containerDefinition.entryPoint = entryPoint.split(" ");
     }
 
